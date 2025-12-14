@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="{{ lang or 'en' }}">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BreedSnap Results</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<style>
+:root{
+  --primary:#2563eb;
+  --secondary:#06b6d4;
+  --accent:#f97316;
+  --muted:#6b7280;
+  --card-bg-light: linear-gradient(180deg, #ffffff, #fbfdff);
+  --card-border: rgba(15, 23, 42, 0.06);
+  --text-dark: #0f1724;
+  --muted-2: #94a3b8;
+}
+
+/* base */
+*{box-sizing:border-box}
+body{
+  margin:0; padding:0;
+  font-family:'Poppins',sans-serif;
+  background: linear-gradient(135deg,#f3f6fb,#e6eef9);
+  color:var(--text-dark);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* header */
+header{
+  width:100%;
+  background:rgba(17,24,39,0.9); /* ✅ updated */
+  color:#fff;
+  padding:14px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0; z-index:1000;
+  box-shadow:0 6px 20px rgba(0,0,0,0.25);
+}
+.logo{
+  font-weight:800;
+  font-size:1.9rem;
+  letter-spacing:0.5px;
+  color:#fff; /* ✅ white */
+  display:flex;
+  align-items:center;
+  gap:10px;
+  transition:all 0.3s ease;
+}
+.logo:hover{
+  transform:scale(1.08);
+  text-shadow:0 0 15px rgba(255,255,255,0.7); /* ✅ glow */
+}
+.logo .dot {
+  width:10px; height:10px; border-radius:50%; background:var(--secondary);
+  box-shadow:0 0 8px rgba(6,182,212,0.35);
+}
+.back-btn{ color:#fff; text-decoration:none; background:rgba(255,255,255,0.04); padding:6px 12px; border-radius:8px; font-weight:600; transition:all 0.3s ease;}
+.back-btn:hover{ background:rgba(255,255,255,0.08); color:var(--primary); }
+
+/* main */
+.container-main{ max-width:1200px; margin:28px auto; padding:0 18px; }
+.page-title{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px; flex-wrap:wrap; }
+.page-title h2{ margin:0; color:#0b3a7b; font-size:1.6rem; font-weight:700; }
+.summary-note{ color:var(--muted-2); font-weight:600; }
+
+/* grid */
+.results-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+  gap:18px;
+  margin-top:12px;
+  align-items:stretch;
+}
+
+/* card */
+.result-card{
+  background: var(--card-bg-light);
+  border: 1px solid var(--card-border);
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow: 0 8px 24px rgba(16,24,40,0.06);
+  display:flex;
+  flex-direction:column;
+  transition:transform .18s ease, box-shadow .18s ease;
+  height:100%;
+  color:var(--text-dark);
+}
+.result-card:hover{ transform:translateY(-6px); box-shadow: 0 18px 40px rgba(16,24,40,0.08); }
+
+/* media */
+.result-media img{ width:100%; height:150px; object-fit:cover; display:block; }
+
+/* body */
+.result-body{
+  padding:14px 16px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:10px;
+  flex:1;
+}
+.card-head{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.card-head h3{ margin:0; font-size:1rem; font-weight:700; color:var(--text-dark); }
+
+/* badges */
+.badge{ padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700; color:#fff; }
+.cow{ background:#10b981; }
+.buffalo{ background:#f59e0b; }
+.unknown{ background:#6b7280; }
+
+/* meta row */
+.meta-row{ color:var(--muted-2); font-size:0.9rem; display:flex; gap:8px; align-items:center; }
+
+/* predictions */
+.info-title{ color:var(--primary); font-weight:700; font-size:0.9rem; margin-bottom:6px; }
+.pred-list{ list-style:none; margin:0; padding:0; font-size:0.9rem; color:var(--text-dark); }
+.pred-list li{ display:flex; align-items:center; gap:8px; padding:6px 0; border-bottom:1px solid rgba(15,23,42,0.04); }
+.pred-left{ flex:1; display:flex; flex-direction:column; gap:6px; }
+.pred-name{ font-weight:600; font-size:0.92rem; color:var(--text-dark); }
+.pred-prob{ min-width:54px; text-align:right; color:var(--muted-2); font-size:0.85rem; }
+
+/* progress */
+.prog{ height:8px; background:rgba(15,23,42,0.03); border-radius:999px; overflow:hidden; }
+.prog .fill{ height:100%; background:linear-gradient(90deg,var(--primary),var(--secondary)); width:0; transition:width 1s ease-in-out; }
+
+/* summary */
+.summary{ color:var(--text-dark); font-size:0.88rem; line-height:1.4; max-height:90px; overflow:auto; background: #fff; border-radius:6px; padding:8px; border:1px solid rgba(15,23,42,0.04); }
+.summary.expanded{ max-height:320px; }
+.summary::-webkit-scrollbar{ width:6px; }
+.summary::-webkit-scrollbar-thumb{ background:rgba(14,20,33,0.06); border-radius:6px; }
+
+/* read more */
+.read-more{ color:var(--primary); cursor:pointer; font-weight:700; font-size:0.85rem; margin-top:6px; }
+
+/* footer */
+.page-footer{ text-align:center; color:var(--muted-2); margin:20px 0 6px; font-size:0.85rem; }
+footer{ text-align:center; padding:10px 0; color:var(--muted-2); font-size:0.85rem; margin-top:14px; }
+
+/* responsive */
+@media(max-width:720px){
+  .result-media img{ height:140px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <span class="logo"><span class="dot" aria-hidden="true"></span>BreedSnap</span>
+  <a class="back-btn" href="{{ url_for('home') }}">
+    <i class="fas fa-arrow-left"></i>
+    {% if lang=='hi' %}नया विश्लेषण{% 
+       elif lang=='ta' %}மீண்டும் பகுப்பாய்வு செய்யவும்{% 
+       elif lang=='te' %}మళ్లీ విశ్లేషించండి{% 
+       elif lang=='bn' %}আবার বিশ্লেষণ করুন{% 
+       elif lang=='gu' %}ફરી વિશ્લેષણ કરો{% 
+       elif lang=='mr' %}पुन्हा विश्लेषण करा{% 
+       else %}Analyze more{% endif %}
+  </a>
+</header>
+
+<main class="container-main">
+  <div class="page-title">
+    <h2>
+      {% if lang=='hi' %}विश्लेषण परिणाम{% 
+         elif lang=='ta' %}பகுப்பாய்வு முடிவுகள்{% 
+         elif lang=='te' %}విశ్లేషణ ఫలితాలు{% 
+         elif lang=='bn' %}বিশ্লেষণ ফলাফল{% 
+         elif lang=='gu' %}વિશ્લેષણ પરિણામો{% 
+         elif lang=='mr' %}विश्लेषण परिणाम{% 
+         else %}Analysis Results{% endif %}
+    </h2>
+
+    <div class="summary-note">
+      {% if voice_result %}
+        {% if lang=='hi' %}वॉइस खोज परिणाम{% 
+           elif lang=='ta' %}குரல் தேடல் முடிவு{% 
+           elif lang=='te' %}వాయిస్ శోధన ఫలితం{% 
+           elif lang=='bn' %}ভয়েস অনুসন্ধানের ফলাফল{% 
+           elif lang=='gu' %}વોઇસ શોધ પરિણામ{% 
+           elif lang=='mr' %}व्हॉइस शोध परिणाम{% 
+           else %}Voice search result{% endif %}
+      {% else %}
+        {{ results|length }}
+        {% if results|length != 1 %}
+          {% if lang=='hi' %} चित्रों का विश्लेषण हुआ{% 
+             elif lang=='ta' %} படங்கள் பகுப்பாய்வு செய்யப்பட்டது{% 
+             elif lang=='te' %} చిత్రాలు విశ్లేషించబడ్డాయి{% 
+             elif lang=='bn' %} ছবি বিশ্লেষণ করা হয়েছে{% 
+             elif lang=='gu' %} છબીઓ વિશ્લેષિત થઈ છે{% 
+             elif lang=='mr' %} प्रतिमा विश्लेषित केल्या{% 
+             else %} images analyzed{% endif %}
+        {% else %}
+          {% if lang=='hi' %} चित्र का विश्लेषण हुआ{% 
+             elif lang=='ta' %} படம் பகுப்பாய்வு செய்யப்பட்டது{% 
+             elif lang=='te' %} చిత్రం విశ్లేషించబడింది{% 
+             elif lang=='bn' %} ছবি বিশ্লেষণ করা হয়েছে{% 
+             elif lang=='gu' %} છબી વિશ્લેષિત થઈ છે{% 
+             elif lang=='mr' %} प्रतिमा विश्लेषित केली{% 
+             else %} image analyzed{% endif %}
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+
+  {% if voice_result %}
+    <div class="results-grid">
+      <article class="result-card" role="article" aria-label="Voice result for {{ voice_result.breed }}">
+        <div class="result-media">
+          {% for img in voice_result.images %}
+            <img src="{{ img }}" alt="{{ voice_result.breed }}" />
+          {% endfor %}
+        </div>
+
+        <div class="result-body">
+          <div>
+            <div class="card-head">
+              <h3>{{ voice_result.breed }}</h3>
+              {% if voice_result.type == "Cow" %}
+                <span class="badge cow">{% if lang=='hi' %}गाय{% else %}Cow{% endif %}</span>
+              {% elif voice_result.type == "Buffalo" %}
+                <span class="badge buffalo">{% if lang=='hi' %}भैंस{% else %}Buffalo{% endif %}</span>
+              {% else %}
+                <span class="badge unknown">{% if lang=='hi' %}अज्ञात{% else %}Unknown{% endif %}</span>
+              {% endif %}
+            </div>
+
+            <div style="margin-top:8px">
+              <div class="info-title">{% if lang=='hi' %}सारांश{% else %}Summary{% endif %}</div>
+              <div class="summary">{{ voice_result.summary }}</div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+  {% else %}
+    {% if results|length == 0 %}
+      <div class="alert alert-warning">
+        {% if lang=='hi' %}कोई परिणाम उपलब्ध नहीं — कृपया चित्र अपलोड करें और पुनः प्रयास करें।{% else %}No results available — please upload images and try again.{% endif %}
+      </div>
+    {% endif %}
+
+    <div class="results-grid">
+      {% for r in results %}
+        <article class="result-card" role="article" aria-label="Result for {{ r.image_filename }}">
+          <div class="result-media">
+            {% if r.image_data %}
+              <img src="{{ r.image_data }}" alt="{{ r.image_filename }}">
+            {% else %}
+              <img src="{{ r.image_url }}?v={{ ts }}" alt="{{ r.image_filename }}">
+            {% endif %}
+          </div>
+
+          <div class="result-body">
+            <div>
+              <div class="card-head">
+                <h3>{{ r.predicted }}</h3>
+                {% set t = r.breed_info.type %}
+                {% if t == "Cow" %}
+                  <span class="badge cow">{% if lang=='hi' %}गाय{% else %}Cow{% endif %}</span>
+                {% elif t == "Buffalo" %}
+                  <span class="badge buffalo">{% if lang=='hi' %}भैंस{% else %}Buffalo{% endif %}</span>
+                {% else %}
+                  <span class="badge unknown">{% if lang=='hi' %}अज्ञात{% else %}Unknown{% endif %}</span>
+                {% endif %}
+              </div>
+
+              <div class="meta-row" style="margin-top:8px; margin-bottom:6px;">
+                <div><i class="fas fa-image" style="color:var(--muted-2)"></i>&nbsp;<span style="color:var(--muted-2)">{{ r.image_filename }}</span></div>
+              </div>
+
+              <div style="margin-top:6px;">
+                <div class="info-title">{% if lang=='hi' %}शीर्ष भविष्यवाणियाँ{% else %}Top predictions{% endif %}</div>
+                <ul class="pred-list">
+                  {% for t in r.top_results %}
+                    <li>
+                      <div class="pred-left">
+                        <div class="pred-name">{{ t.breed }}</div>
+                        <div class="prog"><div class="fill" data-prob="{{ (t.prob * 100) | round(2) }}"></div></div>
+                      </div>
+                      <div class="pred-prob">{{ (t.prob * 100) | round(2) }}%</div>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+
+            <div style="margin-top:8px;">
+              <div class="info-title">{% if lang=='hi' %}सारांश{% else %}Summary{% endif %}</div>
+              <div class="summary">{{ r.breed_info.summary }}</div>
+              <div class="read-more" role="button" aria-pressed="false">{% if lang=='hi' %}और पढ़ें{% else %}Read more{% endif %}</div>
+            </div>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="page-footer">
+    <small>
+      {% if lang=='hi' %}संकेत: यदि परिणाम अनिश्चित हैं तो कृपया पुनः अपलोड करें।{% else %}Tip: If results are uncertain please try to upload again.{% endif %}
+    </small>
+  </div>
+</main>
+
+<footer>
+  &copy; 2025 BreedSnap. All rights reserved.
+</footer>
+
+<script>
+// Animate prediction bars
+document.querySelectorAll(".prog .fill").forEach((bar)=>{
+  const prob = bar.getAttribute("data-prob") || "0";
+  setTimeout(()=>{ bar.style.width = prob + "%"; }, 150 + Math.random()*300);
+});
+
+// Read more toggles
+document.querySelectorAll(".read-more").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    const s = btn.previousElementSibling;
+    if(!s) return;
+    const expanded = s.classList.toggle("expanded");
+    btn.textContent = expanded ? ("{% if lang=='hi' %}कम पढ़ें{% else %}Read less{% endif %}") : ("{% if lang=='hi' %}और पढ़ें{% else %}Read more{% endif %}");
+    btn.setAttribute("aria-pressed", expanded ? "true" : "false");
+    if(expanded) s.scrollIntoView({behavior: "smooth", block: "nearest"});
+  });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,110 @@
+{
+  "Alambadi": {
+    "type": "Cow",
+    "summary": "The Alambadi is an indigenous draught cattle breed from Tamil Nadu, India. It is medium-sized, grey to dark brown, and hardy, used mainly for ploughing and cart-pulling. Its milk yield is relatively low but the breed is resilient to hot climates."
+  },
+  "Ayrshire": {
+    "type": "Cow",
+    "summary": "The Ayrshire is a dairy cattle breed from Scotland, recognized for its reddish-brown and white coat. Ayrshires are medium-sized and produce high-quality milk with good fat content, making them popular in dairy farms worldwide."
+  },
+  "Banni": {
+    "type": "Cow",
+    "summary": "The Banni cattle, also called 'Banni buffalo' in some regions, originate from Kutch, Gujarat. Known for their adaptability to arid environments, they are kept for both milk and draught purposes. They are hardy and can survive in harsh desert climates."
+  },
+  "Brown_Swiss": {
+    "type": "Cow",
+    "summary": "The Brown Swiss is a dairy cattle breed from Switzerland. It is one of the oldest dairy breeds, producing milk with excellent fat-to-protein ratio, ideal for cheese making. Brown Swiss cows are large, strong, and have a calm temperament."
+  },
+  "Gir": {
+    "type": "Cow",
+    "summary": "The Gir is an indigenous dairy cattle breed from Gujarat, India. It is famous for producing A2 milk and has high disease resistance. Gir cows are reddish with white patches and have a convex forehead and long ears."
+  },
+  "Guernsey": {
+    "type": "Cow",
+    "summary": "The Guernsey cow is a dairy breed from the Channel Islands. It produces rich, golden-yellow milk high in beta-carotene and A2 protein. Guernseys are fawn or reddish-brown with white markings."
+  },
+  "Hallikar": {
+    "type": "Cow",
+    "summary": "The Hallikar is a draught breed from Karnataka, India. It is strong, agile, and widely used for agricultural work. Hallikar cattle are medium-sized, grey to white, with long, curved horns."
+  },
+  "Hariana": {
+    "type": "Cow",
+    "summary": "The Hariana is a dual-purpose cattle breed from Haryana, India. It is used for both milk and draught power. Hariana cows are medium-sized, white to grey, and produce moderate quantities of milk."
+  },
+  "Holstein_Friesian": {
+    "type": "Cow",
+    "summary": "Holstein Friesian, originally from the Netherlands, is the highest milk-yielding dairy breed in the world. They are large, black-and-white patterned cows producing 6,000–10,000 liters of milk per lactation."
+  },
+  "Jaffrabadi": {
+    "type": "Buffalo",
+    "summary": "The Jaffrabadi buffalo originates from Gujarat, India. It is one of the heaviest buffalo breeds, with a large frame and downward-curved horns. It is used for milk production as well as draught work."
+  },
+  "Jersey": {
+    "type": "Cow",
+    "summary": "The Jersey cow is a dairy breed from the Channel Islands. It is smaller than Holstein but produces milk with very high butterfat content, making it excellent for butter and cheese production. Jerseys are light brown in color."
+  },
+  "Kankrej": {
+    "type": "Cow",
+    "summary": "The Kankrej cow is a dual-purpose breed from Gujarat and Rajasthan. It has a silver-grey coat, lyre-shaped horns, and is used for both draught power and milk production. It is hardy and disease-resistant."
+  },
+  "Khillari": {
+    "type": "Cow",
+    "summary": "The Khillari is a draught cattle breed from Maharashtra, India. It is compact, agile, and widely used in farming. It has a white to grey coat and is known for its endurance and speed in bullock races."
+  },
+  "Krishna_Valley": {
+    "type": "Cow",
+    "summary": "The Krishna Valley is a draught cattle breed from Karnataka and Maharashtra. It is large-sized, strong, and suited for ploughing. These cattle are greyish-white and have a large hump."
+  },
+  "Malnad_gidda": {
+    "type": "Cow",
+    "summary": "The Malnad Gidda is a small-sized cattle breed from Karnataka. Known as a dwarf breed, it is hardy, disease-resistant, and adapted to hilly and forested areas. Its milk yield is low but highly nutritious."
+  },
+  "Murrah": {
+    "type": "Buffalo",
+    "summary": "The Murrah buffalo is India’s most popular dairy buffalo breed, originating from Haryana and Punjab. It produces 20–25 liters of milk per day with high butterfat content. It has tightly curled horns and a strong build."
+  },
+  "Nagori": {
+    "type": "Cow",
+    "summary": "The Nagori is a draught breed from Rajasthan, India. It is medium-sized, white to grey, and mainly used for ploughing and carting. Its milk yield is limited, but it is highly valued for agricultural purposes."
+  },
+  "Nagpuri": {
+    "type": "Buffalo",
+    "summary": "The Nagpuri buffalo is from Maharashtra, India. It is medium-sized with black skin and backward-curved horns. It is dual-purpose, producing both milk and being used for draught work."
+  },
+  "Ongole": {
+    "type": "Cow",
+    "summary": "The Ongole is a large cattle breed from Andhra Pradesh, India. It is known for its strength and resilience, used both for draught and milk. Ongole cattle are white, with a large hump, and are exported worldwide for crossbreeding."
+  },
+  "Pulikulam": {
+    "type": "Cow",
+    "summary": "The Pulikulam is a draught cattle breed from Tamil Nadu, India. It is small to medium-sized, grey to dark in color, and mainly used in traditional sports like Jallikattu. It is hardy and well-suited to dry regions."
+  },
+  "Rathi": {
+    "type": "Cow",
+    "summary": "The Rathi is a dairy cattle breed from Rajasthan, India. It is medium-sized, brown with white patches, and produces around 1,500–2,000 liters of milk per lactation. Rathi cattle are heat-tolerant and disease-resistant."
+  },
+  "Red_Dane": {
+    "type": "Cow",
+    "summary": "The Red Dane, also called Danish Red, is a high-yield dairy cattle breed from Denmark. It is deep red in color and produces milk rich in protein and fat, making it suitable for cheese production."
+  },
+  "Red_Sindhi": {
+    "type": "Cow",
+    "summary": "The Red Sindhi is a dairy breed from Sindh, Pakistan, also found in India. It has a deep reddish coat and produces 1,700–2,600 liters of milk per lactation. It is heat-tolerant and disease-resistant."
+  },
+  "Sahiwal": {
+    "type": "Cow",
+    "summary": "The Sahiwal cow is a premier indigenous dairy breed from Punjab, India and Pakistan. It produces 2,500–3,000 liters of milk per lactation and is highly resistant to heat and ticks. It has a reddish-brown coat."
+  },
+  "Tharparkar": {
+    "type": "Cow",
+    "summary": "The Tharparkar is a dual-purpose cattle breed from the Thar Desert region of Rajasthan. It has a white to grey coat, produces moderate milk, and is highly resilient in arid climates."
+  },
+  "Toda": {
+    "type": "Buffalo",
+    "summary": "The Toda buffalo is an indigenous breed from the Nilgiri Hills of Tamil Nadu, India. It is reared by the Toda tribe and has cultural significance. It produces rich milk used mainly for traditional dairy products."
+  },
+  "Vechur": {
+    "type": "Cow",
+    "summary": "The Vechur cow is the smallest cattle breed in the world, native to Kerala, India. It produces small quantities of milk (2–3 liters/day) but the milk is very rich in medicinal properties and A2 protein. Vechur cattle are highly disease-resistant and easy to maintain."
+  }
+}

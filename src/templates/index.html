@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="{{ lang or 'en' }}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BreedSnap - Upload</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+body{
+  font-family:'Poppins',sans-serif;
+  margin:0;
+  padding:0;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:url('/static/images/cow_field.jpg') no-repeat center center fixed;
+  background-size:cover;
+}
+header{
+  width:100%;
+  background:rgba(17,24,39,0.9);
+  color:#fff;
+  padding:16px 30px;
+  font-size:1.7rem;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:1000;
+  box-shadow:0 6px 20px rgba(0,0,0,0.25);
+}
+header span.logo{
+  font-weight:800;
+  font-size:2rem;
+  letter-spacing:1px;
+  color:#fff;
+  transition:all 0.3s ease;
+}
+header span.logo:hover{
+  transform:scale(1.08);
+  text-shadow:0 0 15px rgba(255,255,255,0.7);
+}
+.lang-select{
+  background:#fff;color:#111827;border-radius:8px;padding:6px 10px;font-size:0.9rem;border:none;cursor:pointer;min-width:120px;
+  transition:all 0.3s ease;
+}
+.lang-select:hover{box-shadow:0 0 8px rgba(255,255,255,0.3);transform:scale(1.05);}
+.container-center{flex:1;display:flex;justify-content:center;align-items:center;padding:40px 20px;}
+.card{
+  border-radius:20px;
+  background:rgba(0,0,0,0.65); /* black transparent */
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  box-shadow:0 12px 25px rgba(0,0,0,0.2);
+  padding:30px;width:100%;max-width:740px;text-align:center;
+  transform:translateY(30px);opacity:0;
+  animation:fadeInUp 1s forwards;
+  transition:transform 0.3s ease,box-shadow 0.3s ease,background 0.3s ease;
+}
+.card:hover{
+  transform:translateY(-8px) scale(1.02);
+  box-shadow:0 16px 35px rgba(0,0,0,0.3);
+  background:rgba(0,0,0,0.75); /* darker on hover */
+}
+@keyframes fadeInUp{to{opacity:1;transform:translateY(0)}}
+h3{font-weight:700;color:#fff;margin-bottom:18px;} /* heading white for contrast */
+.custom-file-upload{
+  border:2px dashed #3b82f6;padding:14px;border-radius:12px;cursor:pointer;display:flex;gap:12px;align-items:center;text-align:left;
+  transition:all 0.3s ease;
+  color:#fff; /* ensure text inside is visible on dark card */
+}
+.custom-file-upload:hover{background:rgba(59,130,246,0.08);transform:scale(1.02);box-shadow:0 0 12px rgba(59,130,246,0.3);}
+.custom-file-upload i{font-size:22px}
+.preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin-top:16px}
+.preview-item{background:#fff;border-radius:10px;padding:8px;box-shadow:0 6px 18px rgba(0,0,0,0.08);display:flex;flex-direction:column;align-items:center;gap:8px;font-size:12px;position:relative;transition:transform 0.3s ease,box-shadow 0.3s ease;}
+.preview-item:hover{transform:scale(1.05);box-shadow:0 10px 25px rgba(0,0,0,0.15);}
+.preview-item img{width:100%;height:88px;object-fit:cover;border-radius:8px}
+.preview-meta{color:#6b7280}
+.controls{display:flex;gap:10px;margin-top:18px;justify-content:center;align-items:center;flex-wrap:wrap;}
+.btn-submit{padding:12px 22px;border-radius:12px;border:none;color:#fff;background:linear-gradient(90deg,#3b82f6,#6366f1);font-weight:600;transition:all 0.3s ease;}
+.btn-submit:hover{transform:scale(1.08);box-shadow:0 6px 15px rgba(59,130,246,0.5);}
+.btn-clear{background:transparent;border:1px solid rgba(255,255,255,0.3);padding:10px 16px;border-radius:12px;color:#fff;transition:all 0.3s ease;}
+.btn-clear:hover{background:rgba(255,255,255,0.08);transform:scale(1.05);}
+.btn-voice{padding:12px 16px;border-radius:50%;border:none;color:#fff;background:linear-gradient(90deg,#10b981,#34d399);font-weight:600;display:flex;align-items:center;justify-content:center;transition:all 0.3s ease;}
+.btn-voice:hover{transform:scale(1.1);}
+.btn-voice.listening{background:linear-gradient(90deg,#ef4444,#f87171);}
+.btn-voice i{font-size:18px;}
+.overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(11,17,32,0.35);z-index:9999}
+.overlay.hidden{display:none}
+.overlay-inner{background:#fff;padding:18px 24px;border-radius:12px;display:flex;flex-direction:column;align-items:center;gap:12px;min-width:220px}
+.spinner{width:42px;height:42px;border-radius:50%;border:4px solid rgba(0,0,0,0.08);border-top-color:#3b82f6;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+footer{text-align:center;padding:12px 0;font-size:0.9rem;color:#fff;background:rgba(0,0,0,0.6);margin-top:20px}
+@media(max-width:700px){.card{padding:20px;max-width:420px}.preview-item img{height:72px}}
+
+/* ✅ Extra style for Listening message */
+#listening-msg {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ef4444;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 20px;
+  font-weight: 600;
+  display: none;
+  z-index: 2000;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+</style>
+</head>
+<body>
+
+<header>
+    <span class="logo">BreedSnap</span>
+    <form method="POST" action="/set_language" style="margin:0;">
+      <select name="lang" class="lang-select" onchange="this.form.submit()">
+        <option value="en" {% if lang=='en' %}selected{% endif %}>English</option>
+        <option value="hi" {% if lang=='hi' %}selected{% endif %}>हिन्दी</option>
+        <option value="ta" {% if lang=='ta' %}selected{% endif %}>தமிழ்</option>
+        <option value="te" {% if lang=='te' %}selected{% endif %}>తెలుగు</option>
+        <option value="bn" {% if lang=='bn' %}selected{% endif %}>বাংলা</option>
+        <option value="gu" {% if lang=='gu' %}selected{% endif %}>ગુજરાતી</option>
+        <option value="mr" {% if lang=='mr' %}selected{% endif %}>मराठी</option>
+      </select>
+    </form>
+</header>
+
+<div class="container-center">
+    <div class="card">
+        <h3>
+          {% if lang=='hi' %}📂 चित्र जोड़ें (एक या अनेक)
+          {% elif lang=='ta' %}📂 படங்களை சேர்க்கவும் (ஒன்று அல்லது பல)
+          {% elif lang=='te' %}📂 చిత్రాలను జోడించండి (ఒకటి లేదా అనేక)
+          {% elif lang=='bn' %}📂 ছবি যোগ করুন (এক বা একাধিক)
+          {% elif lang=='gu' %}📂 છબીઓ ઉમેરો (એક અથવા ઘણી)
+          {% elif lang=='mr' %}📂 प्रतिमा जोडा (एक किंवा अनेक)
+          {% else %}📂 Add Images (one-by-one or multiple)
+          {% endif %}
+        </h3>
+
+        <form id="upload-form" enctype="multipart/form-data" method="POST" action="/predict" novalidate>
+            <label class="custom-file-upload" for="file-input" title="Select one or more images">
+                <i class="fas fa-images"></i>
+                <div style="flex:1">
+                    <div id="file-name" style="font-weight:700;">
+                      {% if lang=='hi' %}चित्र चुनने के लिए क्लिक करें
+                      {% elif lang=='ta' %}படங்களை தேர்வு செய்ய கிளிக் செய்யவும்
+                      {% elif lang=='te' %}చిత్రాలను ఎంచుకోవడానికి క్లిక్ చేయండి
+                      {% elif lang=='bn' %}ছবি বেছে নিতে ক্লিক করুন
+                      {% elif lang=='gu' %}છબીઓ પસંદ કરવા ક્લિક કરો
+                      {% elif lang=='mr' %}प्रतिमा निवडण्यासाठी क्लिक करा
+                      {% else %}Click to choose images
+                      {% endif %}
+                    </div>
+                    <div id="file-sub" style="font-size:12px;color:#6b7280;">
+                      {% if lang=='hi' %}कहीं से भी चित्र चुनें — आप बाद में और जोड़ सकते हैं
+                      {% elif lang=='ta' %}எங்கிருந்தும் படங்களை தேர்வு செய்யவும் — பின்னர் கூடச் சேர்க்கலாம்
+                      {% elif lang=='te' %}ఎక్కడి నుండైనా చిత్రాలను ఎంచుకోండి — తరువాత మరిన్ని జోడించవచ్చు
+                      {% elif lang=='bn' %}যেকোনো জায়গা থেকে ছবি বেছে নিন — পরে আরও যোগ করতে পারেন
+                      {% elif lang=='gu' %}ક્યાંયથી છબીઓ પસંદ કરો — પછી વધુ ઉમેરી શકો છો
+                      {% elif lang=='mr' %}कुठूनही प्रतिमा निवडा — नंतर आणखी जोडू शकता
+                      {% else %}Pick images from anywhere — you can add more later
+                      {% endif %}
+                    </div>
+                </div>
+                <div style="min-width:80px;text-align:right;color:#6b7280;">
+                    <span id="file-count">0</span> 
+                    {% if lang=='hi' %}जोड़े गए
+                    {% elif lang=='ta' %}சேர்க்கப்பட்டது
+                    {% elif lang=='te' %}జోడించబడింది
+                    {% elif lang=='bn' %}যোগ করা হয়েছে
+                    {% elif lang=='gu' %}ઉમેરાયું
+                    {% elif lang=='mr' %}जोडले
+                    {% else %}added
+                    {% endif %}
+                </div>
+                <input type="file" id="file-input" name="files" accept="image/*" multiple>
+            </label>
+
+            <div id="preview" class="preview-grid" aria-live="polite"></div>
+
+            <div class="controls">
+                <button type="button" id="analyze-btn" class="btn-submit">
+                  <i class="fas fa-magic"></i> Analyze All
+                </button>
+                <button type="button" id="clear-btn" class="btn-clear">
+                  <i class="fas fa-trash"></i> Clear All
+                </button>
+                <button type="button" id="voice-btn" class="btn-voice" title="Voice Search">
+                  <i class="fas fa-microphone"></i>
+                </button>
+                <button type="button" id="open-camera-btn" class="btn-submit">
+                  <i class="fas fa-camera"></i> Open Camera
+                </button>
+            </div>
+
+            <div id="submit-overlay" class="overlay hidden" aria-hidden="true">
+                <div class="overlay-inner">
+                    <div class="spinner"></div>
+                    <p style="margin:0;font-weight:600;color:#111827;">
+                      {% if lang=='hi' %}चित्रों का विश्लेषण हो रहा है — कृपया प्रतीक्षा करें...
+                      {% elif lang=='ta' %}படங்களை பகுப்பாய்வு செய்கிறது — தயவுசெய்து காத்திருங்கள்...
+                      {% elif lang=='te' %}చిత్రాలను విశ్లేషిస్తోంది — దయచేసి వేచి ఉండండి...
+                      {% elif lang=='bn' %}ছবি বিশ্লেষণ করা হচ্ছে — অনুগ্রহ করে অপেক্ষা করুন...
+                      {% elif lang=='gu' %}છબીઓનું વિશ્લેષણ થઈ રહ્યું છે — કૃપા કરીને રાહ જુઓ...
+                      {% elif lang=='mr' %}प्रतिमा विश्लेषण होत आहे — कृपया प्रतीक्षा करा...
+                      {% else %}Analyzing images — please wait...
+                      {% endif %}
+                    </p>
+                    <small style="color:#6b7280">
+                      {% if lang=='hi' %}परिणाम स्वतः खुलेंगे।
+                      {% elif lang=='ta' %}முடிவுகள் தானாகவே திறக்கும்.
+                      {% elif lang=='te' %}ఫలితాలు ఆటోమేటిక్‌గా తెరవబడతాయి.
+                      {% elif lang=='bn' %}ফলাফল স্বয়ংক্রিয়ভাবে খুলবে।
+                      {% elif lang=='gu' %}પરિણામો આપોઆપ ખુલશે.
+                      {% elif lang=='mr' %}परिणाम आपोआप उघडतील.
+                      {% else %}Results will open automatically.
+                      {% endif %}
+                    </small>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ✅ Camera Modal -->
+<div id="camera-modal" class="overlay hidden">
+  <div class="overlay-inner" style="max-width:400px;width:100%;">
+    <video id="camera-stream" autoplay playsinline style="width:100%;border-radius:10px;"></video>
+    <button id="capture-btn" class="btn-submit" style="margin-top:10px;">
+      <i class="fas fa-camera"></i> Capture
+    </button>
+    <button id="close-camera" class="btn-clear" style="margin-top:10px;">Close</button>
+  </div>
+</div>
+
+<!-- ✅ Listening Message -->
+<div id="listening-msg">🎤 Listening... Speak now</div>
+
+<footer>
+    &copy; 2025 BreedSnap. All rights reserved.
+</footer>
+
+<script>
+const fileInput=document.getElementById("file-input");
+const preview=document.getElementById("preview");
+const fileCount=document.getElementById("file-count");
+let allFiles=[];
+
+// ✅ Multiple selection + append
+fileInput.addEventListener("change",()=>{
+  allFiles=allFiles.concat(Array.from(fileInput.files));
+  fileInput.value="";
+  preview.innerHTML="";
+  fileCount.textContent=allFiles.length;
+  allFiles.forEach(file=>{
+    const reader=new FileReader();
+    reader.onload=e=>{
+      const div=document.createElement("div");
+      div.className="preview-item";
+      div.innerHTML=`<img src="${e.target.result}" alt="${file.name}"><div class="preview-meta">${file.name}</div>`;
+      preview.appendChild(div);
+    };
+    reader.readAsDataURL(file);
+  });
+});
+
+// ✅ Submit images via AJAX
+document.getElementById("analyze-btn").addEventListener("click",()=>{
+  if(allFiles.length===0){alert("Please select images first.");return;}
+  document.getElementById("submit-overlay").classList.remove("hidden");
+  const formData=new FormData();
+  allFiles.forEach(f=>formData.append("files",f));
+  fetch("/predict",{method:"POST",body:formData})
+    .then(res=>res.text())
+    .then(html=>{document.open();document.write(html);document.close();})
+    .catch(()=>{alert("Upload failed!");document.getElementById("submit-overlay").classList.add("hidden");});
+});
+
+// ✅ Clear All
+document.getElementById("clear-btn").addEventListener("click",()=>{
+  allFiles=[];preview.innerHTML="";fileCount.textContent="0";
+});
+
+// ✅ Voice Search with listening message
+const voiceBtn=document.getElementById("voice-btn");
+const listeningMsg=document.getElementById("listening-msg");
+
+voiceBtn.addEventListener("click",()=>{
+  const recognition=new(window.SpeechRecognition||window.webkitSpeechRecognition)();
+  recognition.lang="en-US";recognition.start();
+
+  // Show visual + change button
+  voiceBtn.classList.add("listening");
+  listeningMsg.style.display="block";
+
+  recognition.onresult=event=>{
+    const text=event.results[0][0].transcript;
+    let form=document.createElement("form");
+    form.method="POST";form.action="/voice_search";
+    let input=document.createElement("input");
+    input.type="hidden";input.name="query";input.value=text;
+    form.appendChild(input);document.body.appendChild(form);form.submit();
+  };
+
+  recognition.onend=()=>{
+    voiceBtn.classList.remove("listening");
+    listeningMsg.style.display="none";
+  };
+});
+
+// ✅ Camera Logic
+const openCameraBtn=document.getElementById("open-camera-btn");
+const cameraModal=document.getElementById("camera-modal");
+const video=document.getElementById("camera-stream");
+const captureBtn=document.getElementById("capture-btn");
+const closeCamera=document.getElementById("close-camera");
+let stream=null;
+
+openCameraBtn.addEventListener("click",async()=>{
+  try{
+    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}});
+    video.srcObject=stream;cameraModal.classList.remove("hidden");
+  }catch(err){alert("Camera access denied or not available.");}
+});
+
+closeCamera.addEventListener("click",()=>{
+  if(stream){stream.getTracks().forEach(track=>track.stop());}
+  cameraModal.classList.add("hidden");
+});
+
+captureBtn.addEventListener("click",()=>{
+  const canvas=document.createElement("canvas");
+  canvas.width=video.videoWidth;canvas.height=video.videoHeight;
+  const ctx=canvas.getContext("2d");ctx.drawImage(video,0,0,canvas.width,canvas.height);
+  canvas.toBlob(blob=>{
+    if(!blob){alert("Failed to capture image.");return;}
+    document.getElementById("submit-overlay").classList.remove("hidden");
+    const formData=new FormData();formData.append("file",blob,"camera_capture.jpg");
+    fetch("/camera_capture",{method:"POST",body:formData})
+      .then(res=>res.text()).then(html=>{document.open();document.write(html);document.close();})
+      .catch(()=>{alert("Camera upload failed!");document.getElementById("submit-overlay").classList.add("hidden");});
+    if(stream){stream.getTracks().forEach(track=>track.stop());}
+    cameraModal.classList.add("hidden");
+  },"image/jpeg");
+});
+</script>
+
+</body>
+</html>
